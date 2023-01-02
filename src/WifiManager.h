@@ -13,6 +13,7 @@ class WifiManager {
 		AsyncWebServer _server;
 		Configuration _config;
 
+		bool _allowReboot;
 		bool _connected;
 
 		int _reconnectIntervalCheck;
@@ -32,6 +33,9 @@ class WifiManager {
 		WifiManager();
 
 		bool connectToWifi();
+
+		void allowReboot();
+		void allowReboot(bool allow);
 
 		void startManagementServer();
 		void startManagementServer(const char *ssid);

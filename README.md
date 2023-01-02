@@ -49,7 +49,9 @@ Once you start the management server you will be able to access the wifi `WIFI-M
 It will scan for available networks nearby and present them in a dropdown for you to choose from. In case your SSID is not on the list (out of range, hidden SSID, etc) you can choose to specify a custom SSID by choosing `Other network` in the dropdown.
 
 ### Automatic reconnect
-In case the ESP32 is disconnected from the wifi it will automatically try to reconnect.
+In case the ESP32 is disconnected from the wifi it will automatically try to reconnect. I sometimes experience issues reconnecting so I have tried making it more fail-safe.
+
+You also have the option to call `.allowReboot()`/`.allowReboot(bool)` if you experience your ESP32 sometimes hang when trying to reconnect. This will allow the device to restart if it is unable to connect to the wifi.
 
 ### Support for gzip response
 If the request has a `Accept-Encoding` header set with support for gzip, it will send a compressed version of the wifi manager. The UI is 7.5kb in it original state. When minimized it is reduced to 4.4kb and when compressed it comes down to only 1.8kb.

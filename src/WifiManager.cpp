@@ -14,10 +14,12 @@ WifiManager::WifiManager()
 	_connectionTimeout = 10000;
 
 	_nextReconnectCheck = 0;
+	_allowReboot = true;
 	_connected = false;
 	_networks = "";
 }
 
+// Start using events instead: https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino/#11
 void WifiManager::check() {
 	if (_connected && millis() > _nextReconnectCheck) {
 		if (WiFi.status() != WL_CONNECTED) {
@@ -25,13 +27,34 @@ void WifiManager::check() {
 
 			Serial.println("WiFi connection lost. Attempting to reconnect.");
 
-			WiFi.reconnect();
+			// Attempt to use the reconnect command
+			if (WiFi.reconnect()) {
+				return;
+			}
 
-			waitForConnection();
+			// Attempt to disconnect and use our own connection routine
+			WiFi.disconnect();
+
+			if (connectToWifi()) {
+				return;
+			}
+
+			// All hope seems lost. Let's restart.
+			if (_allowReboot) {
+				ESP.restart();
+			}
 		}
 
 		_nextReconnectCheck = millis() + _reconnectIntervalCheck;
 	}
+}
+
+void WifiManager::allowReboot() {
+	allowReboot(true);
+}
+
+void WifiManager::allowReboot(bool allow) {
+	_allowReboot = allow;
 }
 
 String WifiManager::getAvailableNetworks() {
