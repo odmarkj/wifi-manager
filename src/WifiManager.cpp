@@ -57,8 +57,6 @@ String WifiManager::getAvailableNetworks() {
 }
 
 bool WifiManager::connectToWifi() {
-	_config.initSPIFFS();
-
 	String ssid = _config.getSSID();
 	String pass = _config.getPass();
 	String hostname = _config.getHostname();
