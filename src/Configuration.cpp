@@ -1,77 +1,36 @@
 #include "Configuration.h"
+#include "Preferences.h"
 
-#include <SPIFFS.h>
+Preferences preferences;
 
-// File paths to save input values permanently
-const char *ssidPath = "/ssid.txt";
-const char *passPath = "/pass.txt";
-const char *hostnamePath = "/hostname.txt";
+const char *hostnameKey = "hostname";
+const char *ssidKey = "ssid";
+const char *passKey = "path";
 
-Configuration::Configuration() {}
-
-// Initialize SPIFFS
-void Configuration::initSPIFFS() {
-	if (!SPIFFS.begin(true)) {
-		Serial.println("An error has occurred while mounting SPIFFS");
-	}
-	Serial.println("SPIFFS mounted successfully");
+Configuration::Configuration() {
+	preferences.begin("wifiManager", false);
 }
 
 void Configuration::writeSSID(const char *ssid) {
-	writeFile(SPIFFS, ssidPath, ssid);
+	preferences.putString(ssidKey, ssid);
 }
 
 void Configuration::writePass(const char *pass) {
-	writeFile(SPIFFS, passPath, pass);
+	preferences.putString(passKey, pass);
 }
 
 void Configuration::writeHostname(const char *hostname) {
-	writeFile(SPIFFS, hostnamePath, hostname);
+	preferences.putString(hostnameKey, hostname);
 }
 
 String Configuration::getSSID() {
-	return readFile(SPIFFS, ssidPath);
+	returt preferences.getString(ssidKey, "");
 }
 
 String Configuration::getPass() {
-	return readFile(SPIFFS, passPath);
+	returt preferences.getString(passKey, "");
 }
 
 String Configuration::getHostname() {
-	return readFile(SPIFFS, hostnamePath);
-}
-
-// Read File from SPIFFS
-String Configuration::readFile(fs::FS &fs, const char *path) {
-	Serial.printf("Reading file: %s\r\n", path);
-
-	File file = fs.open(path);
-	if (!file || file.isDirectory()) {
-		Serial.println("- failed to open file for reading");
-		return String();
-	}
-
-	String fileContent;
-	while (file.available()) {
-		fileContent = file.readStringUntil('\n');
-		break;
-	}
-
-	return fileContent;
-}
-
-// Write file to SPIFFS
-void Configuration::writeFile(fs::FS &fs, const char *path, const char *message) {
-	Serial.printf("Writing file: %s\r\n", path);
-
-	File file = fs.open(path, FILE_WRITE);
-	if (!file) {
-		Serial.println("- failed to open file for writing");
-		return;
-	}
-	if (file.print(message)) {
-		Serial.println("- file written");
-	} else {
-		Serial.println("- write failed");
-	}
+	returt preferences.getString(hostnameKey, "");
 }
