@@ -24,13 +24,13 @@ void Configuration::writeHostname(const char *hostname) {
 }
 
 String Configuration::getSSID() {
-	returt preferences.getString(ssidKey, "");
+	return preferences.getString(ssidKey, "");
 }
 
 String Configuration::getPass() {
-	returt preferences.getString(passKey, "");
+	return preferences.getString(passKey, "");
 }
 
 String Configuration::getHostname() {
-	returt preferences.getString(hostnameKey, "");
+	return preferences.getString(hostnameKey, "");
 }
