@@ -1,5 +1,6 @@
 #include "Configuration.h"
 #include "Preferences.h"
+#include <SPIFFS.h>
 
 Preferences preferences;
 
@@ -9,6 +10,11 @@ const char *passKey = "path";
 
 Configuration::Configuration() {
 	preferences.begin("wifiManager", false);
+	if (!SPIFFS.begin(true)) {
+		Serial.println("An error has occurred while mounting SPIFFS");
+	}
+	Serial.println("SPIFFS mounted successfully");
+
 }
 
 void Configuration::writeSSID(const char *ssid) {
