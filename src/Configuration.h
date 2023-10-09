@@ -1,6 +1,7 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
+#include <SPIFFS.h>
 #include <Preferences.h>
 
 class Configuration {
